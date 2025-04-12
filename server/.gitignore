@@ -1,0 +1,85 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+db.sqlite3
+db.sqlite3-journal
+*.sqlite3
+
+# Django migrations
+*/migrations/
+!*/migrations/__init__.py
+
+# Environment variables
+.env
+.env.*
+
+# Media and static files
+/media/
+/staticfiles/
+/static/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Python virtual environment
+venv/
+ENV/
+env/
+.venv/
+myenv
+
+# Pip dependency files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# MyPy
+.mypy_cache/
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+
+# Test output
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# pytest
+.cache/
+.pytest_cache/
+
+# Local dev settings
+local_settings.py
+
+# IDEs
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Secrets or credentials
+secrets.json
+
+# Build files
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Node stuff (if using webpack or npm for static files)
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
