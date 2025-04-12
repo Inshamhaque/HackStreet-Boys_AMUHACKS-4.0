@@ -20,7 +20,7 @@ const MessageList: React.FC<MessageListProps> = ({
   }, [messages, isLoading]);
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto">
+    <div className="flex flex-col items-center max-w-2xl w-full h-full overflow-y-auto mx-auto">
       {messages.map((message, index) => (
         <MessageComponent key={index} message={message} />
       ))}
@@ -77,9 +77,9 @@ const MessageComponent: React.FC<MessageComponentProps> = ({ message }) => {
 
   return (
     <div
-      className={`max-w-3xl mx-auto p-4 ${
-        message.type === "user" ? "ml-auto mr-0" : "ml-0 mr-auto"
-      }`}
+      className={`w-full max-w-2xl ${
+        message.type === "user" ? "ml-auto" : "ml-0"
+      } mb-4`}
     >
       <div
         className={`rounded-lg ${

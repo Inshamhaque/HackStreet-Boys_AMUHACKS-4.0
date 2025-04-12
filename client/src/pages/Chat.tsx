@@ -157,8 +157,8 @@ const Chat = () => {
         {selectedPill && messages.length > 0 ? (
           <div className="flex flex-col h-full">
             {/* Messages container */}
-            <div className="flex-grow overflow-hidden flex flex-col">
-              <div className="flex-grow overflow-y-auto px-4 py-4 space-y-4">
+            <div className="flex-grow overflow-hidden flex flex-col max-w-4xl mx-auto px-4 py-4">
+              <div className="flex-grow overflow-y-auto max-w-4xl w-full">
                 <MessageList
                   messages={messages}
                   isLoading={isLoading}
@@ -168,7 +168,10 @@ const Chat = () => {
 
               {/* Input area - fixed at bottom */}
               <div className="flex-shrink-0 p-4 border-t border-gray-800 bg-gray-900">
-                <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
+                <form
+                  onSubmit={handleSubmit}
+                  className="w-full max-w-3xl mx-auto"
+                >
                   <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden">
                     <textarea
                       ref={inputRef}
@@ -209,7 +212,7 @@ const Chat = () => {
               <PillSelector onPillSelect={handlePillSelect} />
             </div>
             {/* Input form */}
-            <form onSubmit={handleSubmit} className="w-full max-w-xl">
+            <form onSubmit={handleSubmit} className="w-full max-w-xl mx-auto">
               <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden">
                 <textarea
                   ref={inputRef}
