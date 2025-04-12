@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { LandingPage } from "./pages/Landing";
-import Dashboard from "./pages/Dashboard";
-import { Chat } from "./pages/Chat";
+import Chat from "./pages/Chat";
 import SignupPage from "./pages/Signup";
 import LoginPage from "./pages/Login";
+import NotFound from "./pages/NotFound";
 export function App() {
   return (
     <BrowserRouter>
@@ -11,8 +11,8 @@ export function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/chat" element={<Chat />} />
+        <Route path="/dashboard" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
