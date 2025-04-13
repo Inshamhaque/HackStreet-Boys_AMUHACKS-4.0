@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from .models import Conversation, Message, UserProfile, PillMode
 from .serializers import (
     ConversationSerializer, MessageSerializer, UserProfileSerializer,
-    ConversationCreateSerializer, MessageCreateSerializer
+    ConversationCreateSerializer, MessageCreateSerializer, ConversationDetailSerializer
 )
 from django.shortcuts import get_object_or_404
 from .services.openai_service import generate_ai_response
@@ -42,10 +42,18 @@ class ConversationViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Conversation.objects.filter(user=self.request.user).order_by('-updated_at')
     
+    # def get_serializer_class(self):
+    #     if self.action == 'create':
+    #         return ConversationCreateSerializer
+    #     return ConversationSerializer
+
     def get_serializer_class(self):
         if self.action == 'create':
             return ConversationCreateSerializer
+        elif self.action == 'retrieve':
+            return ConversationDetailSerializer
         return ConversationSerializer
+
     
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
