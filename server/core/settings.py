@@ -102,7 +102,6 @@ DATABASES = {}
 DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
 
 CORS_ALLOW_ALL_ORIGINS = True #just for developemnt
-
 CORS_ALLOW_CREDENTIALS = True
 CSRF_COOKIE_SAMESITE = 'Lax'  # Use 'None' for cross-site requests with credentials
 CSRF_COOKIE_HTTPONLY = False  # False so JavaScript can read the cookie
@@ -196,6 +195,8 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')  # Your Gmail password
 DEFAULT_FROM_EMAIL = f'SocrAI {env("EMAIL_ADDRESS")}'
 ACCCOUNT_EMAIL_SUBJECT_PREFIX = ''
 
+
+OPENAI_API_KEY = env('OPENAI_API_KEY')
 
 ACCOUNT_USERNAME_BLACKLIST = ['admin', 'accounts', 'onlyauthor']
 
