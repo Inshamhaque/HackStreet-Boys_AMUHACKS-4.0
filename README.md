@@ -91,12 +91,12 @@ SocrAI is an innovative AI coding mentor that adapts to your skill level. Whethe
 #### Backend
 1. Navigate to the backend directory:
    ```bash
-   cd ../backend
+   cd ../server
    ```
 
 2. Create and activate a virtual environment:
    ```bash
-   python -m venv venv
+   python -m venv myenv
    source venv/bin/activate  # On Windows, use: venv\Scripts\activate
    ```
 
