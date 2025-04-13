@@ -5,8 +5,6 @@
 
 # SocrAI - Your AI Coding Mentor
 
-![SocrAI Logo](https://socrAI.ai/logo.png)
-
 ## 🧠 Think Before You Copy
 
 SocrAI helps you solve your coding problems by guiding your thinking process, not by giving away solutions. Choose your guidance style with our unique pill modes.
