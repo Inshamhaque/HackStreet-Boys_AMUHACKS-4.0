@@ -53,6 +53,7 @@ const Chat = () => {
       Authorization: `Token ${API_TOKEN}`,
       "Content-Type": "application/json",
     },
+    timeout: 30000,
   });
   useEffect(() => {
     setapitoken(localStorage.getItem("usertoken") || "");
