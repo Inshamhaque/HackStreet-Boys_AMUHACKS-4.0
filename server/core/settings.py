@@ -17,9 +17,9 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 
 #for development
-DEBUG = True
+# DEBUG = True
 # for production
-# DEBUG = env("DEBUG")
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = ['*']
 
@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'corsheaders',
 
     'rest_framework',
     'rest_framework.authtoken',  # Required for token authentication
@@ -51,6 +52,7 @@ SITE_ID = 1
 SOCIALACCOUNT_PROVIDERS = {}
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -78,6 +81,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'core.wsgi.application'
 
 
@@ -96,6 +100,16 @@ WSGI_APPLICATION = 'core.wsgi.application'
 #for production
 DATABASES = {}
 DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
+
+CORS_ALLOW_ALL_ORIGINS = True #just for developemnt
+
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SAMESITE = 'Lax'  # Use 'None' for cross-site requests with credentials
+CSRF_COOKIE_HTTPONLY = False  # False so JavaScript can read the cookie
+CSRF_USE_SESSIONS = False  # Store CSRF token in cookie, not in session
+CSRF_COOKIE_SECURE = True  # Set to True in production with HTTPS
+
+
 
 
 # Password validation
@@ -159,7 +173,7 @@ REST_FRAMEWORK = {
 # Django Allauth settings
 # New way to configure authentication and signup fields
 ACCOUNT_LOGIN_METHODS = {'email', 'username'}  # Replaces ACCOUNT_AUTHENTICATION_METHOD
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']  # The asterisks indicate required fields
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'first_name*', 'last_name*', 'password1*', 'password2*']
 ACCOUNT_UNIQUE_EMAIL = True  # This setting is still valid
 ACCOUNT_EMAIL_VERIFICATION = 'optional'  # Change to 'mandatory' if you want to enforce email verification
 
@@ -185,3 +199,6 @@ ACCCOUNT_EMAIL_SUBJECT_PREFIX = ''
 
 ACCOUNT_USERNAME_BLACKLIST = ['admin', 'accounts', 'onlyauthor']
 
+REST_AUTH = {
+    'REGISTER_SERIALIZER': 'api.serializers.CustomRegisterSerializer',
+}

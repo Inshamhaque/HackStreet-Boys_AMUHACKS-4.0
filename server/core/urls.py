@@ -16,10 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from api.views import CustomRegisterView, get_csrf_token
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/auth/', include('dj_rest_auth.urls')),  # Login, logout, password reset, etc.
-    path('api/auth/registration/', include('dj_rest_auth.registration.urls')),  # Registration endpoint
-    path('api-auth/', include('rest_framework.urls')),  # DRF browsable API auth
+    path('api/auth/', include('dj_rest_auth.urls')),
+    path('api/auth/registration/', CustomRegisterView.as_view(), name='rest_register'),
+    path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
+
+    path('api/', include('api.urls')),
+    path('csrf-token/', get_csrf_token, name='csrf_token'),
+
 ]
