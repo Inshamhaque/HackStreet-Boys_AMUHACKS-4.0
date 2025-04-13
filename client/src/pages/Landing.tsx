@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import PillSelector from "../components/PillSelector";
 import { PillLevel } from "../pages/Chat";
+import { StarsBackground } from "../components/ui/stars-background";
 
 const LandingPage: React.FC = () => {
   const [selectedPill, setSelectedPill] = useState<PillLevel | null>(null);
@@ -41,8 +42,9 @@ const LandingPage: React.FC = () => {
       </div>
 
       {/* Hero section */}
+      <StarsBackground />
       <motion.header
-        className="container mx-auto px-4 py-16 md:py-24"
+        className="container mx-auto px-4 py-16 md:py-24 z-20"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}

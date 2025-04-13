@@ -1,9 +1,89 @@
 "use client"; // if you're using Next.js app directory
 
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import { BackgroundBeamsWithCollision } from "../components/ui/background-beams-with-collision"; // adjust path as needed
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [csrfToken, setCsrfToken] = useState("");
+
+  const navigate = useNavigate();
+
+  const getCookie = (name: any) => {
+    const match = document.cookie.match(
+      new RegExp("(^| )" + name + "=([^;]+)")
+    );
+    return match ? match[2] : null;
+  };
+
+  useEffect(() => {
+    const fetchCSRFToken = async () => {
+      try {
+        await axios.get(`${BACKEND_URL}/csrf-token`, {
+          withCredentials: true,
+        });
+        const token = getCookie("csrftoken");
+        console.log("csrf token is:", token);
+        if (token) setCsrfToken(token);
+      } catch (err) {
+        console.error("Error fetching CSRF token:", err);
+      }
+    };
+
+    fetchCSRFToken();
+  }, []);
+
+  const handleLogin = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post(
+        `${BACKEND_URL}/api/auth/login/`,
+        {
+          email,
+          password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+          },
+          withCredentials: true,
+        }
+      );
+      localStorage.setItem("usertoken", res.data.key);
+
+      toast.success("Logged in successfully!");
+      navigate("/chat");
+    } catch (err: any) {
+      console.error("Login error:", err);
+
+      // Show more specific error based on response
+      if (err.response && err.response.data) {
+        const errorData = err.response.data;
+
+        // Loop through the error object if it's Django-style validation
+        for (const key in errorData) {
+          if (Array.isArray(errorData[key])) {
+            toast.error(`${key}: ${errorData[key][0]}`);
+            return;
+          }
+        }
+
+        // Fallback if error shape is unexpected
+        toast.error("Something went wrong. Try again.");
+      } else {
+        toast.error("Network error or server is unreachable.");
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen">
       <BackgroundBeamsWithCollision>
@@ -14,7 +94,7 @@ export default function LoginPage() {
           <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-gray-500">
             Welcome Back
           </h2>
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleLogin}>
             <div>
               <label
                 htmlFor="email"
@@ -25,6 +105,8 @@ export default function LoginPage() {
               <input
                 type="email"
                 id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-black/60 dark:text-white"
                 required
               />
@@ -39,6 +121,8 @@ export default function LoginPage() {
               <input
                 type="password"
                 id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-black/60 dark:text-white"
                 required
               />

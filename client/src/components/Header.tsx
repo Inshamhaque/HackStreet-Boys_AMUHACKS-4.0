@@ -1,7 +1,8 @@
 import React from "react";
 import { Menu, ChevronDown } from "lucide-react";
 import { PillLevel } from "../pages/Chat";
-
+import { useUser } from "../context/UserContext";
+import { UserIcon } from "lucide-react";
 interface HeaderProps {
   chatName: string;
   selectedPill: PillLevel;
@@ -13,6 +14,8 @@ const Header: React.FC<HeaderProps> = ({
   selectedPill,
   onPillClick,
 }) => {
+  const { user } = useUser();
+
   return (
     <header className="bg-gray-900 border-b border-gray-800 z-20">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
@@ -23,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({
           <h1 className="font-bold truncate max-w-xs">{chatName}</h1>
         </div>
 
-        <div className="flex items-center">
+        <div className="flex items-center space-x-4">
           {selectedPill && (
             <div
               onClick={onPillClick}
@@ -53,6 +56,14 @@ const Header: React.FC<HeaderProps> = ({
                   : "Advanced"}
               </span>
               <ChevronDown size={14} />
+            </div>
+          )}
+
+          {/* ✅ Username section */}
+          {user && (
+            <div className="flex items-center space-x-2 bg-gray-800/50 px-3 py-1 rounded-full text-sm font-medium text-gray-200">
+              <UserIcon size={16} className="text-gray-400" />
+              <span className="truncate max-w-[100px]">{user.username}</span>
             </div>
           )}
         </div>
