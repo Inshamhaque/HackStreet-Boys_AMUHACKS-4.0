@@ -7,7 +7,7 @@ const LoadingIndicator: React.FC = () => {
   const radius = 40;
 
   return (
-    <div className="bg-gray-900 h-screen w-screen flex flex-col items-center justify-center">
+    <div className="bg-[#1e1e1e] h-screen w-screen flex flex-col items-center justify-center">
       <div className="flex items-center justify-center mb-6">
         <div className="relative h-32 w-32 flex items-center justify-center">
           {/* Rotating container */}

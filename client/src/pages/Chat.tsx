@@ -53,13 +53,14 @@ const Chat = () => {
       Authorization: `Token ${API_TOKEN}`,
       "Content-Type": "application/json",
     },
-    timeout: 30000,
   });
   useEffect(() => {
+    if (!localStorage.getItem("usertoken")) {
+      window.location.href = "/";
+    }
     setapitoken(localStorage.getItem("usertoken") || "");
   }, []);
 
-  // Check if mobile on initial load
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -74,32 +75,28 @@ const Chat = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Simulate initial loading
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(true);
-      // Fetch conversations on initial load
+
       fetchConversations();
     }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
 
-  // Expand chat interface when user starts typing
   useEffect(() => {
     if (inputValue.length > 0 && !isExpanded) {
       setIsExpanded(true);
     }
   }, [inputValue]);
 
-  // Scroll to bottom when new messages arrive
   useEffect(() => {
     if (endOfMessagesRef.current) {
       endOfMessagesRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
 
-  // Clear error after 5 seconds
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {
@@ -109,7 +106,6 @@ const Chat = () => {
     }
   }, [error]);
 
-  // Fetch all conversations
   const fetchConversations = async () => {
     try {
       const response = await axiosInstance.get("/conversations");
@@ -120,7 +116,6 @@ const Chat = () => {
     }
   };
 
-  // Fetch a single conversation and its messages
   const fetchConversation = async (conversationId: number) => {
     setIsLoading(true);
     try {
@@ -129,16 +124,13 @@ const Chat = () => {
       );
       const convo = response.data;
 
-      // Update current conversation
       setCurrentConversationId(conversationId);
       setChatName(convo.title);
       setSelectedPill(convo.pill_mode);
 
-      // Format messages
       if (convo.messages && convo.messages.length > 0) {
         const formattedMessages: Message[] = [];
 
-        // Process message pairs
         for (let i = 0; i < convo.messages.length; i += 2) {
           const userMsg = convo.messages[i];
 
@@ -165,7 +157,6 @@ const Chat = () => {
         setMessages([]);
       }
 
-      // On mobile, hide sidebar after selection
       if (isMobile) {
         setShowSidebar(false);
       }
@@ -177,11 +168,9 @@ const Chat = () => {
     }
   };
 
-  // Send a message to a conversation
   const sendMessage = async (conversationId: number, content: string) => {
     if (!content.trim() || !conversationId) return;
 
-    // Add user message to UI immediately - only if it doesn't already exist
     const userMessageExists = messages.some(
       (m) => m.type === "user" && m.content === content
     );
@@ -190,11 +179,9 @@ const Chat = () => {
       setMessages((prev) => [...prev, { type: "user", content }]);
     }
 
-    // Show loading
     setIsLoading(true);
 
     try {
-      // Send message to API
       const response = await axiosInstance.post(
         `/conversations/${conversationId}/send_message/`,
         {
@@ -202,7 +189,6 @@ const Chat = () => {
         }
       );
 
-      // Add AI response to UI
       if (response.data && response.data.ai_message) {
         // Use the correct response format
         setMessages((prev) => [
@@ -241,17 +227,14 @@ const Chat = () => {
   ) => {
     if (!code.trim() || !pillMode) return;
 
-    // Check if this code is already in the messages
     const codeMessageExists = messages.some(
       (m) => m.type === "user" && m.content === code
     );
 
-    // Add user message to UI only if it doesn't already exist
     if (!codeMessageExists) {
       setMessages((prev) => [...prev, { type: "user", content: code }]);
     }
 
-    // Show loading
     setIsLoading(true);
 
     try {
@@ -261,7 +244,6 @@ const Chat = () => {
         pill_mode: pillMode,
       };
 
-      // Only add conversation_id if it's provided and valid
       if (conversationId) {
         requestData.conversation_id = conversationId;
       }
@@ -271,7 +253,6 @@ const Chat = () => {
         requestData
       );
 
-      // Add AI response to UI
       if (response.data && response.data.analysis) {
         setMessages((prev) => [
           ...prev,
@@ -285,7 +266,7 @@ const Chat = () => {
     } catch (error) {
       console.error("Failed to analyze code:", error);
       setError("Failed to analyze code. Please try again.");
-      // Show error in UI
+
       setMessages((prev) => [
         ...prev,
         {
@@ -300,11 +281,9 @@ const Chat = () => {
     }
   };
 
-  // Handle pill selection for new conversations
   const handlePillSelect = (pill: PillLevel) => {
     setSelectedPill(pill);
 
-    // If starting a new conversation
     if (!currentConversationId && pill) {
       const defaultTitle = {
         green: "Beginner Session",
@@ -314,12 +293,11 @@ const Chat = () => {
 
       setChatName(defaultTitle);
 
-      // Add initial system message
       const systemMessages = {
         green:
-          "CodeMentor will provide detailed guidance with step-by-step explanations.",
-        blue: "CodeMentor will provide balanced hints while challenging you to grow.",
-        red: "CodeMentor will provide minimal guidance, focusing on concepts and pushing your boundaries.",
+          "SorcAI will provide detailed guidance with step-by-step explanations.",
+        blue: "SorcAI will provide balanced hints while challenging you to grow.",
+        red: "SorcAI will provide minimal guidance, focusing on concepts and pushing your boundaries.",
       };
 
       setMessages([
@@ -331,7 +309,6 @@ const Chat = () => {
       ]);
     }
 
-    // Focus input after pill selection
     setTimeout(() => {
       if (inputRef.current) {
         inputRef.current.focus();
@@ -339,13 +316,11 @@ const Chat = () => {
     }, 100);
   };
 
-  // Handle form submission - Fixed version
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!inputValue.trim() || !selectedPill) return;
 
-    // Check if code analysis is needed (simple heuristic)
     const isCodeSubmission =
       inputValue.includes("{") &&
       inputValue.includes("}") &&
@@ -357,18 +332,13 @@ const Chat = () => {
         inputValue.includes("const"));
 
     const currentMessage = inputValue;
-    // Clear input right away to prevent double-submission
+
     setInputValue("");
 
-    // Add user message to UI immediately for better UX
-    // setMessages((prev) => [...prev, { type: "user", content: currentMessage }]);
-
-    // Show loading state
     setIsLoading(true);
 
     try {
       if (!currentConversationId) {
-        // CASE 1: Create a new conversation first
         console.log("Creating new conversation...");
 
         const newTitle =
@@ -376,13 +346,11 @@ const Chat = () => {
             ? currentMessage.substring(0, 22) + "..."
             : currentMessage;
 
-        // Create a new conversation with proper error handling
         const response = await axiosInstance.post("/conversations/", {
           title: newTitle,
           pill_mode: selectedPill,
         });
 
-        // Verify we have a valid response and ID
         if (!response.data || typeof response.data.id !== "number") {
           throw new Error(
             "Failed to get a valid conversation ID from API response"
@@ -392,26 +360,19 @@ const Chat = () => {
         const newConvoId = response.data.id;
         console.log("New conversation created with ID:", newConvoId);
 
-        // Update state with the new conversation ID
         setCurrentConversationId(newConvoId);
         setChatName(newTitle);
 
-        // Now handle the user's message based on whether it's code or regular text
         if (isCodeSubmission) {
-          // For code submissions
           let language = detectCodeLanguage(currentMessage);
 
-          // Use the conversation ID we just created
           await analyzeCode(currentMessage, language, selectedPill, newConvoId);
         } else {
-          // For regular messages, send to the new conversation
           await sendMessage(newConvoId, currentMessage);
         }
 
-        // Update conversations list
         await fetchConversations();
       } else {
-        // CASE 2: Using an existing conversation
         console.log("Using existing conversation ID:", currentConversationId);
 
         if (isCodeSubmission) {
@@ -432,7 +393,6 @@ const Chat = () => {
         error.message || "Failed to process your message. Please try again."
       );
 
-      // Add error message to UI
       setMessages((prev) => [
         ...prev,
         {
@@ -447,7 +407,6 @@ const Chat = () => {
     }
   };
 
-  // Helper function to detect code language
   const detectCodeLanguage = (code: string): string => {
     if (code.includes("def ") || code.includes("import ")) {
       return "Python";
@@ -464,7 +423,6 @@ const Chat = () => {
     }
   };
 
-  // Start a new chat
   const handleNewChat = () => {
     setCurrentConversationId(null);
     setSelectedPill(null);
@@ -473,40 +431,35 @@ const Chat = () => {
     setInputValue("");
     setIsExpanded(false);
 
-    // On mobile, hide sidebar after creating new chat
     if (isMobile) {
-      setShowSidebar(false);
+      setCloseSideBar(true);
     }
   };
 
-  // Toggle sidebar on mobile
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
   };
 
-  // Handle key press in textarea for Enter and Shift+Enter
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter") {
       if (!e.shiftKey) {
         e.preventDefault();
         handleSubmit(e as any);
       }
-      // If Shift+Enter, do nothing (default behavior creates new line)
     }
   };
 
-  // If not loaded yet, show loading animation
   if (!isLoaded) {
     return <LoadingIndicator />;
   }
 
   return (
-    <div className="flex h-screen bg-gray-900 text-gray-100 overflow-hidden">
+    <div className="flex h-screen bg-[#1e1e1e] text-gray-100 overflow-hidden">
       {/* Sidebar - Conversations List */}
       <div
         className={`
           w-64 sm:relative fixed top-0 left-0 z-20 h-full
-          bg-gray-950 border-r border-gray-800 flex flex-col
+          bg-[#1a1b1f] border-r border-gray-800 flex flex-col
           transition-all duration-300 ease-in-out
           ${!closedSidebar ? "flex" : "hidden sm:hidden"}
         `}
@@ -576,8 +529,8 @@ const Chat = () => {
         )}
 
         {/* Header */}
-        <div className="sticky top-0 z-10 bg-gray-900 border-b border-gray-800">
-          <div className="flex items-center p-4">
+        <div className="sticky top-0 z-10 bg-[#1e1e1e] border-b border-gray-800">
+          <div className="flex items-center p-4 w-full">
             {isMobile && (
               <button
                 onClick={toggleSidebar}
@@ -591,6 +544,7 @@ const Chat = () => {
               selectedPill={selectedPill}
               onPillClick={() => setShowPillModal(true)}
               setCloseSideBar={setCloseSideBar}
+              CloseSidebar={closedSidebar}
             />
           </div>
         </div>
@@ -611,19 +565,19 @@ const Chat = () => {
                 </div>
 
                 {/* Input area - fixed at bottom */}
-                <div className="flex-shrink-0 p-4 border-t border-gray-800 bg-gray-900">
+                <div className="flex-shrink-0 p-6 pt-6 border-t border-gray-800 ">
                   <form
                     onSubmit={handleSubmit}
                     className="w-full max-w-3xl mx-auto"
                   >
-                    <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden">
+                    <div className="bg-[#2c2c2c] border border-gray-700 rounded-lg overflow-hidden">
                       <textarea
                         ref={inputRef}
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyDown={handleKeyPress}
                         placeholder="Ask your coding question... (Enter to send, Shift+Enter for new line)"
-                        className="w-full bg-transparent p-4 text-gray-100 resize-none focus:outline-none"
+                        className="w-full bg-transparent p-8 text-gray-100 resize-none focus:outline-none"
                         rows={2}
                       />
                       <div className="border-t border-gray-700 p-2 flex justify-end">
@@ -656,44 +610,6 @@ const Chat = () => {
               <div className="mb-10 w-full max-w-lg">
                 <PillSelector onPillSelect={handlePillSelect} />
               </div>
-              {/* Input form */}
-              <form onSubmit={handleSubmit} className="w-full max-w-xl mx-auto">
-                <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden">
-                  <textarea
-                    ref={inputRef}
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyDown={handleKeyPress}
-                    placeholder="Describe your coding problem or paste your code... (Enter to send, Shift+Enter for new line)"
-                    className="w-full bg-transparent p-4 text-gray-100 resize-none focus:outline-none"
-                    rows={3}
-                    disabled={!selectedPill}
-                  />
-                  <div className="border-t border-gray-700 p-2 flex justify-between items-center">
-                    <div className="text-xs text-gray-400 pl-2">
-                      {selectedPill
-                        ? `${
-                            ((selectedPill ?? "never") as string)
-                              .charAt(0)
-                              .toUpperCase() +
-                            ((selectedPill ?? "never") as string).slice(1)
-                          } Level Selected`
-                        : "Select a level to begin"}
-                    </div>
-                    <button
-                      type="submit"
-                      disabled={!inputValue.trim() || !selectedPill}
-                      className={`p-2 rounded-md ${
-                        !inputValue.trim() || !selectedPill
-                          ? "text-gray-600"
-                          : "text-gray-200 hover:bg-gray-700"
-                      }`}
-                    >
-                      <Send size={18} />
-                    </button>
-                  </div>
-                </div>
-              </form>
             </div>
           )}
         </main>
@@ -711,9 +627,9 @@ const Chat = () => {
                 // Add system message based on new pill
                 const systemMessages = {
                   green:
-                    "CodeMentor will provide detailed guidance with step-by-step explanations.",
-                  blue: "CodeMentor will provide balanced hints while challenging you to grow.",
-                  red: "CodeMentor will provide minimal guidance, focusing on concepts and pushing your boundaries.",
+                    "SocrAI will provide detailed guidance with step-by-step explanations.",
+                  blue: "SocrAI will provide balanced hints while challenging you to grow.",
+                  red: "SocrAI will provide minimal guidance, focusing on concepts and pushing your boundaries.",
                 };
 
                 setMessages([

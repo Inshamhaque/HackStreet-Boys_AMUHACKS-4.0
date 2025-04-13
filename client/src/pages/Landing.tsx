@@ -138,7 +138,7 @@ const LandingPage: React.FC = () => {
         </div>
       </motion.header>
 
-      {/* How It Works section - NEW */}
+      {/* How It Works section */}
       <motion.section
         id="learn-more"
         className="py-20 bg-gray-900/50"
@@ -208,7 +208,7 @@ const LandingPage: React.FC = () => {
         </div>
       </motion.section>
 
-      {/* Pill Modes Explained - NEW */}
+      {/* Pill Modes Explained */}
       <motion.section
         className="py-20 bg-gray-950"
         initial={{ opacity: 0 }}
@@ -436,91 +436,6 @@ const LandingPage: React.FC = () => {
         </div>
       </motion.section>
 
-      {/* Testimonials - NEW */}
-      <motion.section
-        className="py-20 bg-gray-950/80"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-      >
-        <div className="container mx-auto px-4">
-          <motion.h2
-            className="text-3xl font-bold mb-12 text-center"
-            initial={{ y: 30, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            What Developers Are Saying
-          </motion.h2>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {[
-              {
-                quote:
-                  "I never truly learned how to solve problems until I started using the Red Pill mode. Now I can tackle any coding challenge.",
-                name: "Alex Chen",
-                title: "Senior Developer",
-                pill: "Red",
-              },
-              {
-                quote:
-                  "The Blue Pill mode strikes the perfect balance. It helped me bridge the gap from tutorial hell to independent problem solving.",
-                name: "Mei Zhang",
-                title: "Full Stack Developer",
-                pill: "Blue",
-              },
-              {
-                quote:
-                  "As a coding beginner, the Green Pill's step-by-step guidance helped me build confidence and understand core concepts properly.",
-                name: "Jordan Smith",
-                title: "CS Student",
-                pill: "Green",
-              },
-            ].map((testimonial, index) => (
-              <motion.div
-                key={index}
-                className="bg-gray-900 p-6 rounded-xl border border-gray-800"
-                initial={{ y: 50, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ delay: index * 0.2, duration: 0.5 }}
-                viewport={{ once: true }}
-              >
-                <div className="mb-6">
-                  {Array(5)
-                    .fill(0)
-                    .map((_, i) => (
-                      <span key={i} className="text-yellow-400 text-lg">
-                        ★
-                      </span>
-                    ))}
-                </div>
-                <p className="text-gray-300 mb-6 italic">
-                  "{testimonial.quote}"
-                </p>
-                <div className="flex items-center">
-                  <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-lg font-bold mr-3">
-                    {testimonial.name.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="font-medium">{testimonial.name}</p>
-                    <p className="text-gray-400 text-sm flex items-center">
-                      {testimonial.title}
-                      <span
-                        className={`ml-2 px-2 py-1 rounded text-xs bg-${testimonial.pill.toLowerCase()}-500/20 text-${testimonial.pill.toLowerCase()}-400`}
-                      >
-                        {testimonial.pill} Pill User
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </motion.section>
-
       {/* CTA Section */}
       <motion.section
         className="py-20"
@@ -554,14 +469,15 @@ const LandingPage: React.FC = () => {
             </p>
             <div className="flex flex-col md:flex-row items-center justify-center gap-4 relative z-10">
               <motion.button
-                className="py-3 px-8 rounded-lg text-lg font-medium bg-indigo-600 hover:bg-indigo-700 transition-colors duration-300 w-full md:w-auto"
+                onClick={handleGetStarted}
+                className="py-3 px-8 rounded-lg text-lg hover:cursor-pointer font-medium bg-indigo-600 hover:bg-indigo-700 transition-colors duration-300 w-full md:w-auto"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 Try SocrAI Now
               </motion.button>
               <motion.button
-                className="py-3 px-8 rounded-lg text-lg font-medium bg-transparent border border-indigo-500 hover:bg-indigo-900/30 transition-colors duration-300 w-full md:w-auto"
+                className="py-3 px-8 rounded-lg hover:cursor-pointer text-lg font-medium bg-transparent border border-indigo-500 hover:bg-indigo-900/30 transition-colors duration-300 w-full md:w-auto"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
