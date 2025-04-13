@@ -50,7 +50,7 @@ class ConversationDetailSerializer(serializers.ModelSerializer):
 class ConversationCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Conversation
-        fields = ['title', 'pill_mode', 'language']
+        fields = ['id','title', 'pill_mode', 'language']
 
 class MessageCreateSerializer(serializers.ModelSerializer):
     class Meta:
