@@ -24,8 +24,6 @@ DEBUG = env("DEBUG")
 ALLOWED_HOSTS = ['*']
 
 
-# Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,10 +35,10 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'rest_framework',
-    'rest_framework.authtoken',  # Required for token authentication
+    'rest_framework.authtoken',  
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',  # Add this even if you're not using social auth
+    'allauth.socialaccount',  
     'dj_rest_auth',
     'dj_rest_auth.registration',
 
@@ -103,10 +101,10 @@ DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
 
 CORS_ALLOW_ALL_ORIGINS = True #just for developemnt
 CORS_ALLOW_CREDENTIALS = True
-CSRF_COOKIE_SAMESITE = 'Lax'  # Use 'None' for cross-site requests with credentials
-CSRF_COOKIE_HTTPONLY = False  # False so JavaScript can read the cookie
-CSRF_USE_SESSIONS = False  # Store CSRF token in cookie, not in session
-CSRF_COOKIE_SECURE = True  # Set to True in production with HTTPS
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = False
+CSRF_USE_SESSIONS = False  
+CSRF_COOKIE_SECURE = True 
 
 
 
@@ -170,13 +168,12 @@ REST_FRAMEWORK = {
 }
 
 # Django Allauth settings
-# New way to configure authentication and signup fields
-ACCOUNT_LOGIN_METHODS = {'email', 'username'}  # Replaces ACCOUNT_AUTHENTICATION_METHOD
+ACCOUNT_LOGIN_METHODS = {'email', 'username'} 
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'first_name*', 'last_name*', 'password1*', 'password2*']
-ACCOUNT_UNIQUE_EMAIL = True  # This setting is still valid
-ACCOUNT_EMAIL_VERIFICATION = 'optional'  # Change to 'mandatory' if you want to enforce email verification
+ACCOUNT_UNIQUE_EMAIL = True  
+ACCOUNT_EMAIL_VERIFICATION = 'optional'  
 
-# Allow REST API endpoints to use sessions/cookies
+
 REST_SESSION_LOGIN = True
 
 
@@ -184,21 +181,19 @@ REST_SESSION_LOGIN = True
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
-# settings.py
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_USE_TLS = True  # Use TLS for secure connection
-EMAIL_HOST_USER = env('EMAIL_ADDRESS')  # Your Gmail address
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')  # Your Gmail password
+EMAIL_USE_TLS = True  
+EMAIL_HOST_USER = env('EMAIL_ADDRESS')  
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')  
 DEFAULT_FROM_EMAIL = f'SocrAI {env("EMAIL_ADDRESS")}'
 ACCCOUNT_EMAIL_SUBJECT_PREFIX = ''
 
 
 OPENAI_API_KEY = env('OPENAI_API_KEY')
 
-ACCOUNT_USERNAME_BLACKLIST = ['admin', 'accounts', 'onlyauthor']
+ACCOUNT_USERNAME_BLACKLIST = ['admin', 'accounts', 'api']
 
 REST_AUTH = {
     'REGISTER_SERIALIZER': 'api.serializers.CustomRegisterSerializer',
