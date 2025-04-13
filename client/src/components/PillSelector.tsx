@@ -1,5 +1,5 @@
 import React from "react";
-import { Shield, Code, Zap, Pill } from "lucide-react";
+import { Pill } from "lucide-react";
 import { PillLevel } from "../pages/Chat";
 
 interface PillSelectorProps {

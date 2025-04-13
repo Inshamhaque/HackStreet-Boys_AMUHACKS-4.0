@@ -6,7 +6,6 @@ import {
   Zap,
   ArrowRight,
   ChevronDown,
-  Brain,
   BookOpen,
   Award,
   LightbulbIcon,
@@ -44,7 +43,7 @@ const LandingPage: React.FC = () => {
       {/* Hero section */}
       <StarsBackground />
       <motion.header
-        className="container mx-auto px-4 py-16 md:py-24 z-20"
+        className="container mx-auto px-4 py-16 md:py-24"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}

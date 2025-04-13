@@ -176,76 +176,6 @@ const Chat = () => {
     }
   };
 
-  // Create a new conversation
-  const createConversation = async (
-    title: string,
-    pillMode: PillLevel,
-    initialMessage?: string
-  ) => {
-    if (!pillMode) return null;
-
-    setIsLoading(true);
-    try {
-      const response = await axiosInstance.post("/conversations/", {
-        title,
-        pill_mode: pillMode,
-      });
-
-      const newConversation = response.data;
-
-      // Ensure the API provided a valid ID
-      if (!newConversation || !newConversation.id) {
-        throw new Error("Failed to get a valid conversation ID from the API");
-      }
-
-      // Update conversations list
-      await fetchConversations();
-
-      // Set current conversation
-      setCurrentConversationId(newConversation.id);
-      setChatName(newConversation.title);
-
-      // Add initial system message
-      const systemMessages = {
-        green:
-          "CodeMentor will provide detailed guidance with step-by-step explanations.",
-        blue: "CodeMentor will provide balanced hints while challenging you to grow.",
-        red: "CodeMentor will provide minimal guidance, focusing on concepts and pushing your boundaries.",
-      };
-
-      const initialMessages: Message[] = [
-        {
-          type: "ai",
-          content: systemMessages[pillMode as keyof typeof systemMessages],
-          pill: pillMode,
-        },
-      ];
-
-      // Add user message if provided
-      if (initialMessage) {
-        initialMessages.push({
-          type: "user",
-          content: initialMessage,
-        });
-      }
-
-      setMessages(initialMessages);
-
-      // On mobile, hide sidebar after creation
-      if (isMobile) {
-        setShowSidebar(false);
-      }
-
-      return newConversation.id;
-    } catch (error) {
-      console.error("Failed to create conversation:", error);
-      setError("Failed to create new conversation. Please try again.");
-      return null;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   // Send a message to a conversation
   const sendMessage = async (conversationId: number, content: string) => {
     if (!content.trim() || !conversationId) return;
@@ -742,8 +672,10 @@ const Chat = () => {
                     <div className="text-xs text-gray-400 pl-2">
                       {selectedPill
                         ? `${
-                            selectedPill.charAt(0).toUpperCase() +
-                            selectedPill.slice(1)
+                            ((selectedPill ?? "never") as string)
+                              .charAt(0)
+                              .toUpperCase() +
+                            ((selectedPill ?? "never") as string).slice(1)
                           } Level Selected`
                         : "Select a level to begin"}
                     </div>

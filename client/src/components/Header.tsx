@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, ChevronDown, UserIcon, LogOut } from "lucide-react";
+import { Menu, UserIcon, LogOut } from "lucide-react";
 import { PillLevel } from "../pages/Chat";
 import { useUser } from "../context/UserContext";
 
@@ -13,7 +13,6 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({
   chatName,
   selectedPill,
-  onPillClick,
   setCloseSideBar,
 }) => {
   const { user } = useUser();
