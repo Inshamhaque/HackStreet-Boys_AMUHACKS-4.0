@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Menu, X, UserIcon, LogOut } from "lucide-react";
+import { Menu, X, LogOut } from "lucide-react";
 import { PillLevel } from "../pages/Chat";
 import { useUser } from "../context/UserContext";
 
