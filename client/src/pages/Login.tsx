@@ -75,8 +75,6 @@ export default function LoginPage() {
             return;
           }
         }
-
-        // Fallback if error shape is unexpected
         toast.error("Something went wrong. Try again.");
       } else {
         toast.error("Network error or server is unreachable.");
