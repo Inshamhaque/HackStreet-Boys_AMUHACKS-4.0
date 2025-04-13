@@ -33,9 +33,16 @@ class MessageSerializer(serializers.ModelSerializer):
         fields = ['id', 'role', 'content', 'created_at']
 
 class ConversationSerializer(serializers.ModelSerializer):
-    messages = MessageSerializer(many=True, read_only=True)
     user = UserSerializer(read_only=True)
     
+    class Meta:
+        model = Conversation
+        fields = ['id', 'title', 'user', 'created_at', 'updated_at', 'pill_mode', 'language']
+
+class ConversationDetailSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    messages = MessageSerializer(many=True, read_only=True)
+
     class Meta:
         model = Conversation
         fields = ['id', 'title', 'user', 'created_at', 'updated_at', 'pill_mode', 'language', 'messages']
