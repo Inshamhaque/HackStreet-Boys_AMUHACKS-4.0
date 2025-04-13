@@ -1,5 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { Message, PillLevel } from "../pages/Chat";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface MessageListProps {
   messages: Message[];
@@ -20,7 +22,7 @@ const MessageList: React.FC<MessageListProps> = ({
   }, [messages, isLoading]);
 
   return (
-    <div className="flex flex-col items-center max-w-2xl w-full h-full overflow-y-auto mx-auto">
+    <div className="flex flex-col items-center w-full h-full overflow-y-auto px-2 sm:px-4">
       {messages.map((message, index) => (
         <MessageComponent key={index} message={message} />
       ))}
@@ -75,34 +77,41 @@ const MessageComponent: React.FC<MessageComponentProps> = ({ message }) => {
     red: "border-red-700 bg-red-900/10",
   };
 
+  // Replace escaped newlines with real line breaks so markdown is parsed properly
+  const formattedContent = message.content.replace(/\\n/g, "\n");
+
   return (
     <div
-      className={`w-full max-w-2xl ${
-        message.type === "user" ? "ml-auto" : "ml-0"
-      } mb-4`}
+      className={`w-full mb-4 ${
+        message.type === "user" ? "flex justify-end" : "flex justify-start"
+      }`}
     >
       <div
-        className={`rounded-lg ${
+        className={`max-w-[90%] sm:max-w-[85%] md:max-w-2xl rounded-lg ${
           message.type === "user"
-            ? "bg-gray-800 border border-gray-700 text-white ml-12"
+            ? "bg-gray-800 border border-gray-700 text-white"
             : message.pill && pillColors[message.pill]
             ? `border ${pillColors[message.pill]}`
             : "bg-gray-800 border border-gray-700 text-white"
         }`}
       >
-        <div className="p-4">
+        <div className="p-3 sm:p-4">
           {message.type === "user" ? (
-            <p className="whitespace-pre-wrap">{message.content}</p>
-          ) : (
-            <div className="prose prose-invert max-w-none prose-pre:bg-gray-950">
+            <p className="whitespace-pre-wrap break-words text-sm sm:text-base">
               {message.content}
+            </p>
+          ) : (
+            <div className="prose prose-invert max-w-none prose-pre:bg-gray-950 prose-sm sm:prose-base">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {formattedContent}
+              </ReactMarkdown>
             </div>
           )}
         </div>
       </div>
       {message.type === "ai" && message.pill && (
         <div
-          className={`mt-1 text-xs ${
+          className={`ml-2 text-xs ${
             message.pill === "green"
               ? "text-green-500"
               : message.pill === "blue"
@@ -116,5 +125,4 @@ const MessageComponent: React.FC<MessageComponentProps> = ({ message }) => {
     </div>
   );
 };
-
 export default MessageList;
