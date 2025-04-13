@@ -6,138 +6,6 @@ from ..models import PillMode
 openai.api_key = settings.OPENAI_API_KEY
 
 
-#prompt templates for different pill modes
-
-# SYSTEM_PROMPTS = {
-#     PillMode.GREEN: """# SocrAI: Green Pill Mode - Beginner Mentor
-
-# You are SocrAI, an adaptive Socratic coding mentor for beginners. Your mission is to guide programmers through thoughtful questioning rather than providing direct solutions. You believe true mastery comes from struggle, discovery, and independent problem-solving.
-
-# ## Response Guidelines:
-# 1. **First:** Address the user's specific question or coding issue directly
-# 2. **Then:** Break down complex problems into small, manageable steps
-# 3. **Next:** Provide conceptual explanations when needed
-# 4. **Finally:** Ask ONE simple guiding question that leads to discovery
-
-# ## Key Principles:
-# - Keep responses brief and conversational
-# - Maintain continuity from previous messages
-# - Focus on learning fundamentals
-# - NEVER provide complete, ready-to-copy code solutions
-# - Acknowledge progress and correct understanding
-
-# When analyzing code:
-# - Identify errors and misconceptions clearly first
-# - Explain concepts with simple examples
-# - Guide toward best practices through questions
-# - Focus on building strong fundamentals
-
-# Remember: Your purpose is to develop skilled, independent problem-solvers, not to provide quick fixes.""",
-
-#     PillMode.BLUE: """# SocrAI: Blue Pill Mode - Intermediate Mentor
-
-# You are SocrAI, an adaptive Socratic coding mentor for intermediate programmers. Your mission is to guide programmers through thoughtful questioning rather than providing direct solutions. You believe true mastery comes from struggle, discovery, and independent problem-solving.
-
-# ## Response Guidelines:
-# 1. **First:** Address the user's specific question or coding issue directly
-# 2. **Then:** Provide a minimal, high-level hint toward solution patterns
-# 3. **Finally:** Ask ONE thought-provoking question about approach or methodology
-
-# ## Key Principles:
-# - Keep responses brief and conversational
-# - Challenge users to consider edge cases and optimizations
-# - Guide toward relevant documentation or concepts
-# - NEVER provide direct code solutions, only principles and approaches
-# - Focus on developing debugging and problem-solving skills
-
-# When analyzing code:
-# - Identify errors and misconceptions clearly first
-# - Discuss code architecture and patterns
-# - Hint at optimization opportunities 
-# - Encourage consideration of edge cases
-
-# Remember: You provide balanced guidance that challenges while supporting, focusing on developing independent problem-solving abilities.""",
-
-#     PillMode.RED: """# SocrAI: Red Pill Mode - Advanced Mentor
-
-# You are SocrAI, an adaptive Socratic coding mentor for advanced programmers. Your mission is to guide programmers through thoughtful questioning rather than providing direct solutions. You believe true mastery comes from struggle, discovery, and independent problem-solving.
-
-# ## Response Guidelines:
-# 1. **First:** Address the user's specific question or coding issue directly
-# 2. **Then:** Identify only the general problem domain or concept
-# 3. **Finally:** Ask ONE challenging, high-level question about their approach
-
-# ## Key Principles:
-# - Keep responses extremely brief and philosophical
-# - Discuss complexity, performance, or architectural considerations
-# - Challenge assumptions with counterexamples or edge cases
-# - NEVER provide code or specific solutions of any kind
-# - Treat them as a peer, not a student
-
-# When analyzing code:
-# - Identify only core conceptual issues
-# - Focus on algorithmic efficiency and architecture
-# - Challenge with edge cases or performance concerns
-# - Keep feedback minimal and thought-provoking
-
-# Remember: You provide minimal guidance for those seeking maximum challenge. Users have chosen this mode because they want to solve problems entirely on their own."""
-# }
-
-# def generate_ai_response(conversation, user_message, pill_mode, language):
-#     """
-#     Generate AI response based on the pill mode and conversation history
-#     """
-#     # Get the appropriate system prompt based on pill mode
-#     system_prompt = SYSTEM_PROMPTS.get(pill_mode, SYSTEM_PROMPTS[PillMode.GREEN])
-    
-#     # Add language context to the system prompt
-#     system_prompt += f"\n\nThe user is coding in {language}. Provide guidance specific to this language when appropriate."
-    
-#     # Get conversation history in chronological order (oldest first)
-#     conversation_history = list(conversation.messages.order_by('created_at'))
-    
-#     # Format messages for OpenAI API
-#     messages = [
-#         {"role": "system", "content": system_prompt}
-#     ]
-    
-#     # Add conversation history in correct order
-#     for message in conversation_history:
-#         messages.append({"role": message.role, "content": message.content})
-    
-#     # Always add the current user message to ensure it's included
-#     if not conversation_history or conversation_history[-1].role != 'user':
-#         messages.append({"role": "user", "content": user_message})
-    
-#     # Add final reminder to the system
-#     messages.append({
-#         "role": "system", 
-#         "content": """IMPORTANT REMINDERS:
-# 1. Address the user's specific question or error first
-# 2. Keep your response conversational and concise
-# 3. Ask at most ONE follow-up question
-# 4. Never provide complete code solutions
-# 5. Maintain context from previous messages"""
-#     })
-    
-#     try:
-#         # Call OpenAI API
-#         response = openai.ChatCompletion.create(
-#             model="gpt-4o-mini",
-#             messages=messages,
-#             temperature=0.5,  # Lower temperature for more focused responses
-#             max_tokens=2000,
-#         )
-        
-#         # Extract and return the response content
-#         return response.choices[0].message.content
-    
-#     except Exception as e:
-#         # Handle errors gracefully
-#         print(f"Error generating AI response: {str(e)}")
-#         return f"I apologize, but I'm having trouble generating a response right now. Please try again later. Error: {str(e)}"
-
-
 SYSTEM_PROMPTS = {
     PillMode.GREEN: """# SocrAI: Green Pill Mode - Beginner Mentor
 
@@ -223,29 +91,24 @@ def generate_ai_response(conversation, user_message, pill_mode, language):
     """
     Generate AI response based on the pill mode and conversation history
     """
-    # Get the appropriate system prompt based on pill mode
+
     system_prompt = SYSTEM_PROMPTS.get(pill_mode, SYSTEM_PROMPTS[PillMode.GREEN])
     
-    # Add language context to the system prompt
     system_prompt += f"\n\nThe user is coding in {language}. Provide guidance specific to this language when appropriate."
     
-    # Get conversation history in chronological order (oldest first)
     conversation_history = list(conversation.messages.order_by('created_at'))
     
-    # Format messages for OpenAI API
     messages = [
         {"role": "system", "content": system_prompt}
     ]
     
-    # Add conversation history in correct order
     for message in conversation_history:
         messages.append({"role": message.role, "content": message.content})
     
-    # Always add the current user message to ensure it's included
     if not conversation_history or conversation_history[-1].role != 'user':
         messages.append({"role": "user", "content": user_message})
     
-    # Add final reminder to the system
+    
     messages.append({
         "role": "system", 
         "content": """REMEMBER THESE GUIDELINES:
@@ -259,15 +122,13 @@ def generate_ai_response(conversation, user_message, pill_mode, language):
     })
     
     try:
-        # Call OpenAI API
         response = openai.ChatCompletion.create(
             model="gpt-4o-mini",
             messages=messages,
-            temperature=0.7,  # Slightly higher temperature for more expressive responses
-            max_tokens=2500,  # Increased token limit for more detailed responses
+            temperature=0.6,  
+            max_tokens=1800,  
         )
         
-        # Extract and return the response content
         return response.choices[0].message.content
     
     except Exception as e:
@@ -283,7 +144,6 @@ def analyze_code(code_snippet, pill_mode, language):
     """
     base_prompt = SYSTEM_PROMPTS.get(pill_mode, SYSTEM_PROMPTS[PillMode.GREEN])
     
-    # Add specific code analysis instructions
     system_prompt = base_prompt + f"""
     
 You are now analyzing code in {language}. For this code analysis task:
@@ -297,15 +157,14 @@ The code to analyze is provided below.
 """
     
     try:
-        # Call OpenAI API
         response = openai.ChatCompletion.create(
             model="gpt-4o-mini", 
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": f"Please analyze this {language} code:\n\n```{language}\n{code_snippet}\n```"}
             ],
-            temperature=0.7,
-            max_tokens=2000,
+            temperature=0.6,
+            max_tokens=1500,
         )
         
         return response.choices[0].message.content
