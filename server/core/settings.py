@@ -101,7 +101,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {}
 DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
 
-CORS_ALLOW_ALL_ORIGINS = False #just for developemnt
+CORS_ALLOW_ALL_ORIGINS = True #just for developemnt
 
 CORS_ALLOW_CREDENTIALS = True
 CSRF_COOKIE_SAMESITE = 'Lax'  # Use 'None' for cross-site requests with credentials
