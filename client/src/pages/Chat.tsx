@@ -295,9 +295,9 @@ const Chat = () => {
 
       const systemMessages = {
         green:
-          "SorcAI will provide detailed guidance with step-by-step explanations.",
-        blue: "SorcAI will provide balanced hints while challenging you to grow.",
-        red: "SorcAI will provide minimal guidance, focusing on concepts and pushing your boundaries.",
+          "SocrAI will provide detailed guidance with step-by-step explanations.",
+        blue: "SocrAI will provide balanced hints while challenging you to grow.",
+        red: "SocrAI will provide minimal guidance, focusing on concepts and pushing your boundaries.",
       };
 
       setMessages([
