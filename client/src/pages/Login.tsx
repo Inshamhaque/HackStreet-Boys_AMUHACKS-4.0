@@ -9,6 +9,7 @@ import { BackgroundBeamsWithCollision } from "../components/ui/background-beams-
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export default function LoginPage() {
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [csrfToken, setCsrfToken] = useState("");
@@ -41,6 +42,7 @@ export default function LoginPage() {
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const res = await axios.post(
@@ -129,7 +131,7 @@ export default function LoginPage() {
               type="submit"
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition"
             >
-              Log In
+              {loading ? "Loading..." : "Log in"}
             </button>
           </form>
           <p className="text-sm text-center text-gray-600 dark:text-gray-400">

@@ -14,6 +14,7 @@ const getCookie = (name: string): string | null => {
 
 export default function SignupPage() {
   const [fullname, setFullname] = useState("");
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password1, setPassword1] = useState("");
@@ -43,7 +44,7 @@ export default function SignupPage() {
     e.preventDefault();
 
     const [first_name = "", last_name = ""] = fullname.trim().split(" ");
-
+    setLoading(true);
     try {
       const res = await axios.post(
         `${BACKEND_URL}/api/auth/registration/`,
@@ -182,7 +183,7 @@ export default function SignupPage() {
               type="submit"
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition"
             >
-              Sign Up
+              {loading ? "Signing up..." : "Signup"}
             </button>
           </form>
           <p className="text-sm text-center text-gray-600 dark:text-gray-400">

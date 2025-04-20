@@ -530,7 +530,7 @@ const Chat = () => {
 
         {/* Header */}
         <div className="sticky top-0 z-10 bg-[#1e1e1e] border-b border-gray-800">
-          <div className="flex items-center p-4 w-full">
+          <div className="flex items-center p-2 w-full">
             {isMobile && (
               <button
                 onClick={toggleSidebar}
@@ -565,26 +565,26 @@ const Chat = () => {
                 </div>
 
                 {/* Input area - fixed at bottom */}
-                <div className="flex-shrink-0 p-6 pt-6 border-t border-gray-800 ">
+                <div className="flex-shrink-0 p-2 pt-6 border-t border-gray-800 ">
                   <form
                     onSubmit={handleSubmit}
                     className="w-full max-w-3xl mx-auto"
                   >
-                    <div className="bg-[#2c2c2c] border border-gray-700 rounded-lg overflow-hidden">
+                    <div className="bg-[#2c2c2c] border border-gray-700 bottom-0 rounded-lg overflow-hidden">
                       <textarea
                         ref={inputRef}
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyDown={handleKeyPress}
                         placeholder="Ask your coding question... (Enter to send, Shift+Enter for new line)"
-                        className="w-full bg-transparent p-8 text-gray-100 resize-none focus:outline-none"
+                        className="w-full bg-transparent p-2 text-gray-100 resize-none focus:outline-none"
                         rows={2}
                       />
                       <div className="border-t border-gray-700 p-2 flex justify-end">
                         <button
                           type="submit"
                           disabled={!inputValue.trim()}
-                          className={`p-2 rounded-md ${
+                          className={`p-2rounded-md ${
                             !inputValue.trim()
                               ? "text-gray-600"
                               : "text-gray-200 hover:bg-gray-700"
