@@ -1,8 +1,3 @@
-# HackStreet-Boys_AMUHACKS-4.0
-#AMUHACKS 4.0 
-#CSSAMU 
-#AMU
-
 # SocrAI - Your AI Coding Mentor
 
 ## 🧠 Think Before You Copy
