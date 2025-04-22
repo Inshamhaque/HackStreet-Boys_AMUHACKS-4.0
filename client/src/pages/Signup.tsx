@@ -44,6 +44,11 @@ export default function SignupPage() {
     e.preventDefault();
 
     const [first_name = "", last_name = ""] = fullname.trim().split(" ");
+    if (last_name == "") {
+      toast.error("Please Enter full name", {
+        position: "top-right",
+      });
+    }
     setLoading(true);
     try {
       const res = await axios.post(
@@ -85,6 +90,7 @@ export default function SignupPage() {
       } else {
         toast.error("Network error or server is unreachable.");
       }
+      setLoading(false);
     }
   };
 
