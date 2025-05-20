@@ -71,7 +71,6 @@ class ConversationViewSet(viewsets.ModelViewSet):
                 content=serializer.validated_data['content']
             )
             
-            # Generate AI response based on pill mode
             response_content = generate_ai_response(
                 conversation=conversation,
                 user_message=user_message.content,
@@ -79,7 +78,6 @@ class ConversationViewSet(viewsets.ModelViewSet):
                 language=conversation.language
             )
             
-            # Save AI response
             ai_message = Message.objects.create(
                 conversation=conversation,
                 role=Message.Role.ASSISTANT,

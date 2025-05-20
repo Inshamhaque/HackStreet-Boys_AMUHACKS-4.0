@@ -1,27 +1,31 @@
 from pathlib import Path
+import os
 from environ import Env
 import dj_database_url
 
-env = Env()
-env.read_env()
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# 1. Setup base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# 2. Setup environment handler
+env = Env()
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+# 3. Load .env file from the BASE_DIR
+env.read_env(os.path.join(BASE_DIR, '.env'))
 
-# SECURITY WARNING: keep the secret key used in production secret!
+# 4. Confirm .env is being read
+print("DEBUG: SECRET_KEY =", env('SECRET_KEY', default='NOT FOUND'))
+print("DEBUG: OPENAI_API_KEY =", env('OPENAI_API_KEY', default='NOT FOUND'))
+
+# 5. Now use the loaded values
 SECRET_KEY = env('SECRET_KEY')
+OPENAI_API_KEY = env('OPENAI_API_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG mode
+DEBUG = env.bool("DEBUG", default=True)
 
-#for development
-# DEBUG = True
-# for production
-DEBUG = env("DEBUG")
-
+# 6. Allowed hosts
 ALLOWED_HOSTS = ['*']
+
 
 
 INSTALLED_APPS = [
@@ -33,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'corsheaders',
-
     'rest_framework',
     'rest_framework.authtoken',  
     'allauth',
@@ -41,7 +44,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount',  
     'dj_rest_auth',
     'dj_rest_auth.registration',
-
     'api',
 ]
 
