@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { BackgroundBeamsWithCollision } from "../components/ui/background-beams-with-collision";
-
+// ok
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 // Utility to get a cookie
